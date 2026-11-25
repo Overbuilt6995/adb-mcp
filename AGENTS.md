@@ -8,8 +8,8 @@ A structured-output MCP server wrapping the Android Debug Bridge. 90 tools in 9 
 
 - **Never weaken the shell gate.** `run_shell` exists only when `ADB_MCP_ALLOW_SHELL=1`; with it unset it must return an error and run nothing. Default is off.
 - **All device-side quoting goes through `core.quote_argv` / `core.shell` / `core.shell_rc`.** `adb shell` concatenates its args through the device's `sh`, so any tool that passes a user string (package name, `dumpsys` arg, settings value) must use a list-form call. Hand-built strings bypass the injection guard.
-- **Keep `delete_file`'s protected-root refusal** (`/`, `/system`, `/data`, `/sdcard`, `/vendor`, `/product`) and `dumpsys`'s service-name-only validation. These are the documented scope guarantees in `SECURITY.md`.
-- **`README.md` is the public contract** — the 90-tool list, env vars and callback names are asserted there. Changing tool names or counts means updating README, and `tests/test_smoke.py` asserts registration.
+- **Keep `delete_file`'s protected-root refusal** (`/`, `/system`, `/data`, `/sdcard`, `/vendor`, `/product`) and `dumpsys`'s service-name-only validation. These are the documented scope guarantees in [SECURITY.md](SECURITY.md).
+- **[README.md](README.md) is the public contract** — the 90-tool list, env vars and callback names are asserted there. Changing tool names or counts means updating README, and `tests/test_smoke.py` asserts registration.
 - **Do not push to `origin`.** If a change belongs upstream, report it; Joash decides.
 - Line length 110, `target-version = "py310"`, ruff selects `E,F,I,UP,B` (see `pyproject.toml`).
 
@@ -50,8 +50,8 @@ Every device tool also takes a per-call `serial`.
 
 | Area | File | Read it when |
 |---|---|---|
-| Security model, what is and is not guarded | `SECURITY.md` | Touching any tool that shells out or mutates the device |
-| Public contract: install, client registration, all 90 tools, config | `README.md` | Before renaming a tool or changing behaviour |
+| Security model, what is and is not guarded | [SECURITY.md](SECURITY.md) | Touching any tool that shells out or mutates the device |
+| Public contract: install, client registration, all 90 tools, config | [README.md](README.md) | Before renaming a tool or changing behaviour |
 | adb discovery, `run`, `quote_argv`, `shell`/`shell_rc`, `ok`/`err`, `@tool`, `shell_allowed` | `adb_mcp/core.py` | Any plumbing change |
 | stdio entry point (`import adb_mcp.tools` then `mcp.run()`) | `adb_mcp/server.py` | Startup problems |
 | Tool registration order | `adb_mcp/tools/__init__.py` | A tool not appearing |
